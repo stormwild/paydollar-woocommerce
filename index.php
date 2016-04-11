@@ -235,6 +235,8 @@ function woocommerce_paydollar_init(){
 		function receipt_page($order){
 			echo '<p>'.__('Thank you for your order. We are now redirecting you to the Payment Gateway to proceed with the payment.').'</p>';
 			echo $this -> generate_paydollar_form($order);
+			
+			wp_enqueue_script( 'paydollar' );
 		}
 		
 		/**
@@ -287,16 +289,7 @@ function woocommerce_paydollar_init(){
 			
           	return '<form action="' . $this -> payment_url . '" method="post" id="paydollar_payment_form">
             	' . implode('', $paydollar_args_array) . '
-            		</form>
-		            <script type="text/javascript">
-						jQuery(function(){						
-							setTimeout("paydollar_payment_form();", 5000);
-	    				});
-						function paydollar_payment_form(){
-							jQuery("#paydollar_payment_form").submit();
-						}
-	    			</script>
-            ';
+            		</form>';
 
 		}
 		
@@ -449,5 +442,16 @@ function woocommerce_paydollar_init(){
 	}
 
 	add_filter('woocommerce_payment_gateways', 'woocommerce_add_paydollar_gateway' );
+
+	function register_paydollar_scripts() {
+		wp_register_script(
+			'paydollar',
+			plugins_url( 'js/paydollar.js', __FILE__ ),
+			['jquery'],
+			null,
+			true
+		);
+	}
+	add_action( 'wp_enqueue_scripts', 'register_paydollar_scripts' );
 	
 }
