@@ -260,7 +260,7 @@ function woocommerce_paydollar_init(){
 			$cancel_url = esc_url( $order->get_cancel_order_url() );//get_permalink( get_option('woocommerce_checkout_page_id') ); 
 			
 			//TODO: for secureHash
-			$secureHash = '';
+			$secureHash = 'CSBRRvElACL65oN5jURJN9wcx7E224UN';
 			if($this -> secure_hash_secret != ''){
 				$secureHash = $this -> generatePaymentSecureHash($this -> merchant_id, $orderRef, $this -> curr_code, $order -> order_total, $this -> pay_type, $this -> secure_hash_secret);
 			}
@@ -369,6 +369,7 @@ function woocommerce_paydollar_init(){
 									
 									$order -> payment_complete();
 									$order -> add_order_note('Your payment was successful! Payment reference no: '.$payRef);
+                                    update_post_meta($order->id, '_payRef', $payRef);
 									$woocommerce -> cart -> empty_cart();	
 									echo ' - Payment Success!';
 								}
